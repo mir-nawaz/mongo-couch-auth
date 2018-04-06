@@ -1,0 +1,37 @@
+version: "3.3"
+
+services:
+  mongodb:
+        image: mongo:latest
+        container_name: "mongodb"
+        environment:
+          - AUTH=yes
+          - MONGODB_ADMIN_USER=root
+          - MONGODB_ADMIN_PASS=root
+          - MONGODB_APPLICATION_DATABASE=cipher
+          - MONGODB_APPLICATION_USER=restapiuser
+          - MONGODB_APPLICATION_PASS=r3sT4pIp4ssw0rd
+          - MONGO_DATA_DIR=/data/db
+        volumes:
+          - "/home/mir/Desktop/mongodb:/data/db"  
+          - "./run.sh:/run.sh"  
+          - "./setPass.sh:/setPass.sh"  
+        ports:
+            - "27018:27017"
+        command:
+            - /bin/sh
+            - -c
+            - |
+                chmod +x /run.sh
+                chmod +x /setPass.sh
+                ./run.sh
+  couchdb:
+        image: hyperledger/fabric-couchdb
+        container_name: couchdb
+        environment: 
+          - COUCHDB_USER=admin
+          - COUCHDB_PASSWORD=admin
+        volumes: 
+          - "/home/mir/workspace/block-chain/docker-mongo-auth/dubaipay-peer1/:/opt/couchdb/data"
+        ports:
+          - "6984:5984"
