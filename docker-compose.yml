@@ -12,6 +12,8 @@ services:
           - MONGODB_APPLICATION_USER=restapiuser
           - MONGODB_APPLICATION_PASS=r3sT4pIp4ssw0rd
           - MONGO_DATA_DIR=/data/db
+          - MONGO_LOG_DIR=/var/log/mongodb.log,
+          - MONGO_LOG_LEVEL:2
         volumes:
           - "/home/mir/Desktop/mongodb:/data/db"  
           - "./run.sh:/run.sh"  
@@ -32,6 +34,6 @@ services:
           - COUCHDB_USER=admin
           - COUCHDB_PASSWORD=admin
         volumes: 
-          - "/home/mir/workspace/block-chain/docker-mongo-auth/dubaipay-peer1/:/opt/couchdb/data"
+          - "/home/mir/Desktop/couchdb:/opt/couchdb/data"
         ports:
           - "6984:5984"

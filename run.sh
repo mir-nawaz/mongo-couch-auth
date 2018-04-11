@@ -1,8 +1,10 @@
 #!/bin/bash
 set -m
+ 
+MONGO_LOG_DIR=${MONGO_LOG_DIR:-"/var/log/mongodb.log"}
 
 mongodb_cmd="mongod"
-cmd="$mongodb_cmd"
+cmd="$mongodb_cmd --logpath ${MONGO_LOG_DIR}"
 
 if [ "$AUTH" == "yes" ]; then
     cmd="$cmd --auth"

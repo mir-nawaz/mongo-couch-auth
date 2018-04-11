@@ -3,6 +3,8 @@
 # Admin User
 MONGODB_ADMIN_USER=${MONGODB_ADMIN_USER:-"admin"}
 MONGODB_ADMIN_PASS=${MONGODB_ADMIN_PASS:-"4dmInP4ssw0rd"}
+MONGO_LOG_DIR=${MONGO_LOG_DIR:-"/var/log/mongodb.log"}
+MONGO_LOG_LEVEL=${MONGO_LOG_LEVEL:-5}
 
 # Application Database User
 MONGODB_APPLICATION_DATABASE=${MONGODB_APPLICATION_DATABASE:-"admin"}
@@ -15,11 +17,14 @@ RET=1
 while [[ RET -ne 0 ]]; do
     echo "=> Waiting for confirmation of MongoDB service startup..."
     sleep 5
-    mongo admin --eval "help" >/dev/null 2>&1
+    mongo admin --eval "help" >$MONGO_LOG_DIR 2>&1
     RET=$?
 done
 
 # Create the admin user
+echo "=> Creating set log level for all components "
+mongo admin --eval "db.setLogLevel($MONGO_LOG_LEVEL);"
+
 echo "=> Creating admin user with a password in MongoDB"
 mongo admin --eval "db.createUser({user: '$MONGODB_ADMIN_USER', pwd: '$MONGODB_ADMIN_PASS', roles:[{role:'root',db:'admin'}]});"
 
